@@ -10,7 +10,7 @@ import qdarkstyle
 BASE_API_URL = "https://api.openweathermap.org/"
 
 class WeatherGUI(QMainWindow):
-    def __init__(self, key: str):
+    def __init__(self):
         super(WeatherGUI, self).__init__()
         title = "Weather"
         uic.loadUi('uis/weather_gui.ui', self)
@@ -18,44 +18,74 @@ class WeatherGUI(QMainWindow):
         self.setWindowTitle(title)
         self.show()
 
-        self.api_key = key
+        self.get_weather.clicked.connect(self.load_weather)
 
-        self.weather_text.setReadOnly(True)
+    # Gets the latitude and longitude from a particular zipcode
+    def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
+        try:
+            # grabs geographical data and gets the latitude and longitude from it
+            geocode_api_request = requests.get(BASE_API_URL + f"geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key}")
+            api = geocode_api_request.json()
+            lat, lon = api['lat'], api['lon']
+            return lat, lon
+        except Exception as e:
+            print(e)
+    
+    # Displays loaded weather in the GUI
+    def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, units: str) -> None:
+        # determines the degree reading of the temperature
+        ending_units = None
+        if units == "metric":
+            ending_units = "C"
+        elif units == "imperial":
+            ending_units = "F"
         
-        try:
-            city = "London"
-            country_code = "GB"
-            limit = 1
-            geocode_api_request = requests.get(BASE_API_URL + f"geo/1.0/direct?q={city},{country_code}&limit={limit}&appid={self.api_key}")
-            api = json.loads(geocode_api_request.content)
-            lat, lon = api[0]['lat'], api[0]['lon']
-        except Exception as e:
-            print(e)
-            api = "Error"
+        # sets up formats via fstrings
+        temperature_display = f"{temp}°{ending_units}"
+        weather_display = f"{weather}"
+        humidity_display = f"Humidity: {humidity}%"
+        city_display = f"In {city_name}"
 
-        print(lat, lon)
+        # sets all display strings to display on screen
+        self.current_temperature.setPlainText(temperature_display)
+        self.current_weather.setPlainText(weather_display)
+        self.current_humidity.setPlainText(humidity_display)
+        self.location_text.setPlainText(city_display)
+
+    # Loads weather when all areas are filled
+    def load_weather(self) -> None:
+        zip_code = self.zipcode_edit.text()
+        country_code = "US"
+        api_key = self.api_key_edit.text()
+        units = None
 
         try:
-            units = "metric"
-            weather_api_request = requests.get(BASE_API_URL + f"data/2.5/weather?lat={lat}&lon={lon}&appid={self.api_key}&units={units}")
-            api = json.loads(weather_api_request.content)
-            print(api)
-            weather = api['weather'][0]['main']
+            # grabs latitude and longitude of zipcode for the api
+            lat, lon = self.get_lat_and_lon(zip_code, country_code, api_key)
+            
+            # returns units in metric
+            if self.metric_radio.isChecked():
+                units = "metric"
+            # returns units in imperial
+            elif self.imperial_radio.isChecked():
+                units = "imperial"
+
+            weather_api_request = requests.get(BASE_API_URL + f"data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units={units}")
+            api = weather_api_request.json()
+
+            # grabs weather data from the requested json file
             current_temperature = round(api['main']['temp'])
-            humidity = api['main']['humidity']
-            print(weather)
-            self.weather_text.setPlainText(f"{weather}, {current_temperature}C, humidity={humidity}%")
+            current_weather = api['weather'][0]['main']
+            current_humidity = api['main']['humidity']
+            city_name = api['name']
+
+            self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, units)
         except Exception as e:
             print(e)
-
-
 
 def main() -> None:
-    print("Enter API Key:")
-    key = str(input())
-
     app = QApplication(sys.argv)
-    window = WeatherGUI(key)
+    window = WeatherGUI()
     sys.exit(app.exec_())
 
 main()
