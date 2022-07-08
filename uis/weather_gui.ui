@@ -14,13 +14,13 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="weather_text_edit">
+   <widget class="QTextEdit" name="weather_text">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>10</y>
-      <width>521</width>
-      <height>51</height>
+      <x>23</x>
+      <y>9</y>
+      <width>531</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
