@@ -22,30 +22,31 @@ class WeatherGUI(QMainWindow):
 
     # Gets the latitude and longitude from a particular zipcode
     def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
-        print(zip_code, country_code, api_key)
         try:
+            # grabs geographical data and gets the latitude and longitude from it
             geocode_api_request = requests.get(BASE_API_URL + f"geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key}")
             api = geocode_api_request.json()
-            print(api)
             lat, lon = api['lat'], api['lon']
-            print(lat, lon)
             return lat, lon
         except Exception as e:
             print(e)
     
     # Displays loaded weather in the GUI
     def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, units: str) -> None:
+        # determines the degree reading of the temperature
         ending_units = None
         if units == "metric":
             ending_units = "C"
         elif units == "imperial":
             ending_units = "F"
         
+        # sets up formats via fstrings
         temperature_display = f"{temp}°{ending_units}"
         weather_display = f"{weather}"
         humidity_display = f"Humidity: {humidity}%"
         city_display = f"In {city_name}"
 
+        # sets all display strings to display on screen
         self.current_temperature.setPlainText(temperature_display)
         self.current_weather.setPlainText(weather_display)
         self.current_humidity.setPlainText(humidity_display)
@@ -59,6 +60,7 @@ class WeatherGUI(QMainWindow):
         units = None
 
         try:
+            # grabs latitude and longitude of zipcode for the api
             lat, lon = self.get_lat_and_lon(zip_code, country_code, api_key)
             
             # returns units in metric
@@ -80,8 +82,6 @@ class WeatherGUI(QMainWindow):
             self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, units)
         except Exception as e:
             print(e)
-
-
 
 def main() -> None:
     app = QApplication(sys.argv)
