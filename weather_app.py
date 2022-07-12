@@ -36,7 +36,7 @@ class WeatherGUI(QMainWindow):
             print(e)
     
     # changes weather icon given a particular weather state
-    def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int) -> None:
+    def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int, cloud_percentage: int) -> None:
         print(weather)
         file = "icons/inverted/"
         # 15 minute time offset in unix UTC
@@ -54,22 +54,32 @@ class WeatherGUI(QMainWindow):
                     file += 'moon.png'
             case 'Rain':
                 file += 'rainy.png'
+            case 'Drizzle':
+                file += 'drizzle.png'
+            case 'Thunderstorm':
+                file += 'storm.png'
             case 'Mist':
+                file += 'fog.png'
+            case 'Fog':
                 file += 'fog.png'
             case 'Snow':
                 file += 'snowing.png'
             case 'Clouds':
-                if sunrise <= dt <= sunset:
-                    file += 'cloudy.png'
+                if cloud_percentage <= 50:
+                    if sunrise <= dt <= sunset:
+                        file += 'cloudy.png'
+                    else:
+                        file += 'cloudy-night.png'
                 else:
-                    file += 'cloudy-night.png'
+                    file += 'clouds.png'
             case other:
                 file += 'rainy-day.png'
             
         label.setPixmap(QPixmap(file))
 
+    # Adds any extra icons in front of the "feels like" field
     def change_extra_icon(self, weather: str, temp_and_units: tuple):
-        # adds any extra icons in front of the "feels like" field
+        # sets up the proper threshold values depending on the units given
         too_hot_threshold = too_cold_threshold = -1
         match temp_and_units[1]:
             case 'metric':
@@ -81,6 +91,7 @@ class WeatherGUI(QMainWindow):
             case other:
                 pass
         
+        # determines and draws an extra icon, if any
         file = 'icons/inverted/'
         if temp_and_units[0] >= too_hot_threshold:
             file += 'hot.png'
@@ -152,7 +163,8 @@ class WeatherGUI(QMainWindow):
             dt = api['dt']
             sunrise = api['sys']['sunrise']
             sunset = api['sys']['sunset']
-            self.change_weather_icon(self.weather_icon_label, current_weather, dt, sunrise, sunset)
+            cloud_percentage = api['clouds']['all']
+            self.change_weather_icon(self.weather_icon_label, current_weather, dt, sunrise, sunset, cloud_percentage)
             self.change_extra_icon(current_weather, (current_feels_like, units))
         except Exception as e:
             print(e)
