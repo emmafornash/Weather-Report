@@ -57,6 +57,11 @@ class WeatherGUI(QMainWindow):
                 file += 'fog.png'
             case 'Snow':
                 file += 'snowing.png'
+            case 'Clouds':
+                if sunrise <= dt <= sunset:
+                    file += 'cloudy.png'
+                else:
+                    file += 'cloudy-night.png'
             case other:
                 file += 'rainy-day.png'
             
