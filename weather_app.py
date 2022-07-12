@@ -38,12 +38,23 @@ class WeatherGUI(QMainWindow):
     # changes weather icon given a particular weather state
     def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int) -> None:
         file = "icons/inverted/"
+        # 15 minute time offset in unix UTC
+        sunrise_set_offet = 900
         match weather:
             case 'Clear':
-                if sunrise <= dt <= sunset:
+                # determines which clear sky image to use, depending on the time of day
+                if sunrise + sunrise_set_offet <= dt <= sunset - sunrise_set_offet:
                     file += 'sun.png'
+                elif sunrise - sunrise_set_offet <= dt <= sunrise + sunrise_set_offet:
+                    file += 'sunrise.png'
+                elif sunset - sunrise_set_offet <= dt <= sunset + sunrise_set_offet:
+                    file += 'sunset.png'
                 else:
                     file += 'moon.png'
+            case 'Rain':
+                file += 'rainy.png'
+            case 'Mist':
+                file += 'fog.png'
             case 'Snow':
                 file += 'snowing.png'
             case other:
@@ -63,8 +74,8 @@ class WeatherGUI(QMainWindow):
         # sets up formats via fstrings
         temperature_display = f"{temp}°{ending_units}"
         feels_like_display = f"Feels like: {feels_like}°{ending_units}"
-        weather_display = f"{weather}"
-        humidity_display = f"Humidity: {humidity}%"
+        weather_display = f"{weather.capitalize()}"
+        humidity_display = f"{humidity}%"
         city_display = f"In {city_name}, {country}"
 
         # sets all display strings to display on screen
@@ -95,17 +106,20 @@ class WeatherGUI(QMainWindow):
             weather_api_request = requests.get(BASE_API_URL + f"data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units={units}")
             api = weather_api_request.json()
 
+            print(api)
+
             # grabs weather data from the requested json file
             current_temperature = round(api['main']['temp'])
             current_feels_like = round(api['main']['feels_like'])
-            current_weather = api['weather'][0]['main']
+            current_weather_desc = api['weather'][0]['description']
             current_humidity = api['main']['humidity']
             city_name = api['name']
             country = api['sys']['country']
 
-            self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, country, current_feels_like, units)
+            self.display_weather_on_screen(current_temperature, current_weather_desc, current_humidity, city_name, country, current_feels_like, units)
 
             # grabs time and date and changes the main weather icon
+            current_weather = api['weather'][0]['main']
             dt = api['dt']
             sunrise = api['sys']['sunrise']
             sunset = api['sys']['sunset']
