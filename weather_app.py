@@ -20,6 +20,8 @@ class WeatherGUI(QMainWindow):
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
+        self.weather_icon_label.setPixmap(QPixmap('icons/inverted/rainy-day.png'))
+
         self.get_weather.clicked.connect(self.load_weather)
 
     # Gets the latitude and longitude from a particular zipcode
