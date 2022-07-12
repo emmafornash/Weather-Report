@@ -77,8 +77,9 @@ class WeatherGUI(QMainWindow):
             
         label.setPixmap(QPixmap(file))
 
+    # Adds any extra icons in front of the "feels like" field
     def change_extra_icon(self, weather: str, temp_and_units: tuple):
-        # adds any extra icons in front of the "feels like" field
+        # sets up the proper threshold values depending on the units given
         too_hot_threshold = too_cold_threshold = -1
         match temp_and_units[1]:
             case 'metric':
@@ -90,6 +91,7 @@ class WeatherGUI(QMainWindow):
             case other:
                 pass
         
+        # determines and draws an extra icon, if any
         file = 'icons/inverted/'
         if temp_and_units[0] >= too_hot_threshold:
             file += 'hot.png'
