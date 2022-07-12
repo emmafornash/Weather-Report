@@ -35,13 +35,21 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
     
+    # changes weather icon given a particular weather state
     def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int) -> None:
-        file = ""
+        file = "icons/inverted/"
         match weather:
             case 'Clear':
-                label.setPixmap(QPixmap('icons/inverted/sun.png'))
+                if sunrise <= dt <= sunset:
+                    file += 'sun.png'
+                else:
+                    file += 'moon.png'
+            case 'Snow':
+                file += 'snowing.png'
             case other:
-                label.setPixmap(QPixmap('icons/inverted/rainy-day.png'))
+                file += 'rainy-day.png'
+            
+        label.setPixmap(QPixmap(file))
 
     # Displays loaded weather in the GUI
     def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, country: str, feels_like: str, units: str) -> None:
