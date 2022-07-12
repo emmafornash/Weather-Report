@@ -35,7 +35,7 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
     
-    def change_weather_icon(self, weather: str) -> None:
+    def change_weather_icon(self, weather: str, dt: int, sunrise: int, sunset: int) -> None:
         file = ""
         match weather:
             case 'Clear':
@@ -65,7 +65,6 @@ class WeatherGUI(QMainWindow):
         self.current_weather.setPlainText(weather_display)
         self.current_humidity.setPlainText(humidity_display)
         self.location_text.setPlainText(city_display)
-        self.change_weather_icon(weather)
 
     # Loads weather when all areas are filled
     def load_weather(self) -> None:
@@ -97,6 +96,11 @@ class WeatherGUI(QMainWindow):
             country = api['sys']['country']
 
             self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, country, current_feels_like, units)
+
+            dt = api['dt']
+            sunrise = api['sys']['sunrise']
+            sunset = api['sys']['sunset']
+            self.change_weather_icon(current_weather, dt, sunrise, sunset)
         except Exception as e:
             print(e)
 
