@@ -37,6 +37,7 @@ class WeatherGUI(QMainWindow):
     
     # changes weather icon given a particular weather state
     def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int) -> None:
+        print(weather)
         file = "icons/inverted/"
         # 15 minute time offset in unix UTC
         sunrise_set_offet = 900
@@ -66,6 +67,29 @@ class WeatherGUI(QMainWindow):
                 file += 'rainy-day.png'
             
         label.setPixmap(QPixmap(file))
+
+    def change_extra_icon(self, weather: str, temp_and_units: tuple):
+        # adds any extra icons in front of the "feels like" field
+        too_hot_threshold = too_cold_threshold = -1
+        match temp_and_units[1]:
+            case 'metric':
+                too_hot_threshold = 37
+                too_cold_threshold = -17
+            case 'imperial':
+                too_hot_threshold = 99
+                too_cold_threshold = 0
+            case other:
+                pass
+        
+        file = 'icons/inverted/'
+        if temp_and_units[0] >= too_hot_threshold:
+            file += 'hot.png'
+        elif temp_and_units[0] <= too_cold_threshold:
+            file += 'cold.png'
+        elif weather == 'Rain':
+            file += 'umbrella.png'
+        
+        self.extra_icon_label.setPixmap(QPixmap(file))
 
     # Displays loaded weather in the GUI
     def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, country: str, feels_like: str, units: str) -> None:
@@ -129,6 +153,7 @@ class WeatherGUI(QMainWindow):
             sunrise = api['sys']['sunrise']
             sunset = api['sys']['sunset']
             self.change_weather_icon(self.weather_icon_label, current_weather, dt, sunrise, sunset)
+            self.change_extra_icon(current_weather, (current_feels_like, units))
         except Exception as e:
             print(e)
 
