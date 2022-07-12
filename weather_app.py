@@ -35,8 +35,16 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
     
+    def change_weather_icon(self, weather: str) -> None:
+        file = ""
+        match weather:
+            case 'Clear':
+                self.weather_icon_label.setPixmap(QPixmap('icons/inverted/sun.png'))
+            case other:
+                self.weather_icon_label.setPixmap(QPixmap('icons/inverted/rainy-day.png'))
+
     # Displays loaded weather in the GUI
-    def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, units: str) -> None:
+    def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, country: str, feels_like: str, units: str) -> None:
         # determines the degree reading of the temperature
         ending_units = None
         if units == "metric":
@@ -46,15 +54,18 @@ class WeatherGUI(QMainWindow):
         
         # sets up formats via fstrings
         temperature_display = f"{temp}°{ending_units}"
+        feels_like_display = f"Feels like: {feels_like}°{ending_units}"
         weather_display = f"{weather}"
         humidity_display = f"Humidity: {humidity}%"
-        city_display = f"In {city_name}"
+        city_display = f"In {city_name}, {country}"
 
         # sets all display strings to display on screen
         self.current_temperature.setPlainText(temperature_display)
+        self.current_feels_like.setPlainText(feels_like_display)
         self.current_weather.setPlainText(weather_display)
         self.current_humidity.setPlainText(humidity_display)
         self.location_text.setPlainText(city_display)
+        self.change_weather_icon(weather)
 
     # Loads weather when all areas are filled
     def load_weather(self) -> None:
@@ -79,11 +90,13 @@ class WeatherGUI(QMainWindow):
 
             # grabs weather data from the requested json file
             current_temperature = round(api['main']['temp'])
+            current_feels_like = round(api['main']['feels_like'])
             current_weather = api['weather'][0]['main']
             current_humidity = api['main']['humidity']
             city_name = api['name']
+            country = api['sys']['country']
 
-            self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, units)
+            self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, country, current_feels_like, units)
         except Exception as e:
             print(e)
 
