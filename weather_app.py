@@ -35,13 +35,13 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
     
-    def change_weather_icon(self, weather: str, dt: int, sunrise: int, sunset: int) -> None:
+    def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int) -> None:
         file = ""
         match weather:
             case 'Clear':
-                self.weather_icon_label.setPixmap(QPixmap('icons/inverted/sun.png'))
+                label.setPixmap(QPixmap('icons/inverted/sun.png'))
             case other:
-                self.weather_icon_label.setPixmap(QPixmap('icons/inverted/rainy-day.png'))
+                label.setPixmap(QPixmap('icons/inverted/rainy-day.png'))
 
     # Displays loaded weather in the GUI
     def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, country: str, feels_like: str, units: str) -> None:
@@ -97,10 +97,11 @@ class WeatherGUI(QMainWindow):
 
             self.display_weather_on_screen(current_temperature, current_weather, current_humidity, city_name, country, current_feels_like, units)
 
+            # grabs time and date and changes the main weather icon
             dt = api['dt']
             sunrise = api['sys']['sunrise']
             sunset = api['sys']['sunset']
-            self.change_weather_icon(current_weather, dt, sunrise, sunset)
+            self.change_weather_icon(self.weather_icon_label, current_weather, dt, sunrise, sunset)
         except Exception as e:
             print(e)
 
