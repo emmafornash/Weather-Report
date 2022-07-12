@@ -1,10 +1,11 @@
 import os, sys
 import requests
 import json
-from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap
 from PyQt5.QtWidgets import *
-from PyQt5 import uic
+from PyQt5 import uic, QtSvg
 from PyQt5.QtCore import Qt
+from PyQt5.QtSvg import QSvgWidget
 import qdarkstyle
 
 BASE_API_URL = "https://api.openweathermap.org/"
@@ -16,6 +17,7 @@ class WeatherGUI(QMainWindow):
         uic.loadUi('uis/weather_gui.ui', self)
         self.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
         self.setWindowTitle(title)
+        self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
         self.get_weather.clicked.connect(self.load_weather)
