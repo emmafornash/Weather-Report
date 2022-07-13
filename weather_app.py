@@ -1,6 +1,7 @@
 import os, sys
 import requests
 import json
+import uszipcode as zc
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtSvg
@@ -153,7 +154,9 @@ class WeatherGUI(QMainWindow):
             current_feels_like = round(api['main']['feels_like'])
             current_weather_desc = api['weather'][0]['description']
             current_humidity = api['main']['humidity']
-            city_name = api['name']
+            # may potentially set the name to None. keep an eye on this
+            city_details = zc.SearchEngine().by_zipcode(zip_code)
+            city_name = f'{city_details.major_city}, {city_details.state}'
             country = api['sys']['country']
 
             self.display_weather_on_screen(current_temperature, current_weather_desc, current_humidity, city_name, country, current_feels_like, units)
