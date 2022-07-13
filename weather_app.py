@@ -241,18 +241,24 @@ class WeatherGUI(QMainWindow):
     def load_data(self, file):
         with open(file, 'r') as file:
             json_obj = json.load(file)
-        self.zipcode_edit.setText(json_obj['zip'])
-        self.api_key_edit.setText(json_obj['api'])
-        if json_obj['units'] == 'metric':
-            self.metric_radio.setChecked(True)
+        
+        needed_fields = {"zip", "api", "country", "units"}
+        if needed_fields <= json_obj.keys():
+            self.zipcode_edit.setText(json_obj['zip'])
+            self.api_key_edit.setText(json_obj['api'])
+            if json_obj['units'] == 'metric':
+                self.metric_radio.setChecked(True)
+            else:
+                self.imperial_radio.setChecked(True)
+            self.load_weather(country_name=json_obj['country'])
         else:
-            self.imperial_radio.setChecked(True)
-        self.load_weather(country_name=json_obj['country'])
+            print("Needed fields don't exist in JSON file")
 
     # Loads a .json file from a FileDialog
     def load_data_from_file(self) -> None:
-        file = QFileDialog.getOpenFileName(self, "Open File", ".", 'JSON (*.json)')
-        self.load_data(file[0])
+        file = QFileDialog.getOpenFileName(self, "Open File", ".", 'JSON (*.json)')[0]
+        self.load_data(file)
+        
 
 def main() -> None:
     app = QApplication(sys.argv)
