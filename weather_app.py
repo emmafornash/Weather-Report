@@ -37,34 +37,8 @@ class WeatherGUI(QMainWindow):
         self.get_weather.clicked.connect(self.load_weather)
         self.set_default_action.triggered.connect(self.save_default_data)
 
-    # Grabs and saves default user data
-    def save_default_data(self):
-        # grabs all data necessary
-        zip_code = self.zipcode_edit.text()
-        country_name = self.country_list.selectedIndexes()[0].data()
-        api_key = self.api_key_edit.text()
-        units = None
-        
-        # returns units in metric
-        if self.metric_radio.isChecked():
-            units = "metric"
-        # returns units in imperial
-        elif self.imperial_radio.isChecked():
-            units = "imperial"
-        
-        # stores data in a dictionary
-        data_dict = {
-            'zip': zip_code,
-            'country': country_name,
-            'api': api_key,
-            'units': units
-        }
-
-        # writes to ./user.json
-        json_obj = json.dumps(data_dict, indent=4)
-        
-        with open("user.json", "w") as out:
-            out.write(json_obj)
+        if os.path.exists('./user.json'):
+            self.load_default_data()
 
     # Gets the latitude and longitude from a particular zipcode
     def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
@@ -168,9 +142,11 @@ class WeatherGUI(QMainWindow):
         self.location_text.setPlainText(city_display)
 
     # Loads weather when all areas are filled
-    def load_weather(self) -> None:
+    def load_weather(self, country_name: str=None) -> None:
         zip_code = self.zipcode_edit.text()
-        country_name = self.country_list.selectedIndexes()[0].data()
+        # loads the selected country name if not loading user data
+        if not country_name:
+            country_name = self.country_list.selectedIndexes()[0].data()
         country_code = pycountry.countries.get(name=country_name).alpha_2
         api_key = self.api_key_edit.text()
         units = None
@@ -217,6 +193,47 @@ class WeatherGUI(QMainWindow):
             self.change_extra_icon(current_weather, (current_feels_like, units))
         except Exception as e:
             print(e)
+
+    # Grabs and saves default user data
+    def save_default_data(self):
+        # grabs all data necessary
+        zip_code = self.zipcode_edit.text()
+        country_name = self.country_list.selectedIndexes()[0].data()
+        api_key = self.api_key_edit.text()
+        units = None
+        
+        # returns units in metric
+        if self.metric_radio.isChecked():
+            units = "metric"
+        # returns units in imperial
+        elif self.imperial_radio.isChecked():
+            units = "imperial"
+        
+        # stores data in a dictionary
+        data_dict = {
+            'zip': zip_code,
+            'country': country_name,
+            'api': api_key,
+            'units': units
+        }
+
+        # writes to ./user.json
+        json_obj = json.dumps(data_dict, indent=4)
+        
+        with open("user.json", "w") as out:
+            out.write(json_obj)
+
+    # Loads user data from file
+    def load_default_data(self):
+        with open('user.json', 'r') as file:
+            json_obj = json.load(file)
+        self.zipcode_edit.setText(json_obj['zip'])
+        self.api_key_edit.setText(json_obj['api'])
+        if json_obj['units'] == 'metric':
+            self.metric_radio.setChecked(True)
+        else:
+            self.imperial_radio.setChecked(True)
+        self.load_weather(country_name=json_obj['country'])
 
 def main() -> None:
     app = QApplication(sys.argv)
