@@ -36,10 +36,11 @@ class WeatherGUI(QMainWindow):
 
         self.get_weather.clicked.connect(self.load_weather)
         self.set_default_action.triggered.connect(self.save_default_data)
-        self.load_default_action.triggered.connect(self.load_default_data)
+        # lambdatized the connected function to add a file argument to it
+        self.load_default_action.triggered.connect(lambda checked, file='user.json': self.load_data(file))
 
         if os.path.exists('./user.json'):
-            self.load_default_data()
+            self.load_data(file='user.json')
 
     # Gets the latitude and longitude from a particular zipcode
     def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
@@ -227,9 +228,9 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
 
-    # Loads user data from file
-    def load_default_data(self):
-        with open('user.json', 'r') as file:
+    # Loads data from file
+    def load_data(self, file):
+        with open(file, 'r') as file:
             json_obj = json.load(file)
         self.zipcode_edit.setText(json_obj['zip'])
         self.api_key_edit.setText(json_obj['api'])
