@@ -252,9 +252,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QLineEdit" name="zipcode_edit">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>270</y>
-      <width>141</width>
+      <x>420</x>
+      <y>240</y>
+      <width>181</width>
       <height>31</height>
      </rect>
     </property>
@@ -326,7 +326,7 @@ p, li { white-space: pre-wrap; }
      <enum>Qt::RichText</enum>
     </property>
     <property name="pixmap">
-     <pixmap>../icons/inverted/rainy-day-i.png</pixmap>
+     <pixmap>../icons/inverted/rainy-day.png</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -384,6 +384,21 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="scaledContents">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QListView" name="country_list">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>280</y>
+      <width>181</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
     </property>
    </widget>
   </widget>

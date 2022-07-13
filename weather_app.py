@@ -1,6 +1,9 @@
 import os, sys
+from types import NoneType
 import requests
 import json
+import uszipcode as zc
+import pycountry
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtSvg
@@ -20,7 +23,15 @@ class WeatherGUI(QMainWindow):
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
-        self.weather_icon_label.setPixmap(QPixmap('icons/inverted/rainy-day.png'))
+        self.country_model = QStandardItemModel()
+
+        
+        self.country_model.appendRow(QStandardItem("United States"))
+        self.country_model.appendRow(QStandardItem("United Kingdom"))
+        self.country_model.appendRow(QStandardItem("Germany"))
+        self.country_model.appendRow(QStandardItem("Canada"))
+
+        self.country_list.setModel(self.country_model)
 
         self.get_weather.clicked.connect(self.load_weather)
 
@@ -128,7 +139,8 @@ class WeatherGUI(QMainWindow):
     # Loads weather when all areas are filled
     def load_weather(self) -> None:
         zip_code = self.zipcode_edit.text()
-        country_code = "US"
+        country_name = self.country_list.selectedIndexes()[0].data()
+        country_code = pycountry.countries.get(name=country_name).alpha_2
         api_key = self.api_key_edit.text()
         units = None
 
@@ -153,7 +165,13 @@ class WeatherGUI(QMainWindow):
             current_feels_like = round(api['main']['feels_like'])
             current_weather_desc = api['weather'][0]['description']
             current_humidity = api['main']['humidity']
-            city_name = api['name']
+            # may potentially set the name to None. keep an eye on this
+            city_details = zc.SearchEngine().by_zipcode(zip_code)
+            # if city details is None, then the zipcode given is not an American one
+            if not isinstance(city_details, NoneType):
+                city_name = f'{city_details.major_city}, {city_details.state}'
+            else:
+                city_name = api['name']
             country = api['sys']['country']
 
             self.display_weather_on_screen(current_temperature, current_weather_desc, current_humidity, city_name, country, current_feels_like, units)
