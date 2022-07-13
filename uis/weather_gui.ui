@@ -416,12 +416,18 @@ p, li { white-space: pre-wrap; }
      <string>File</string>
     </property>
     <addaction name="set_default_action"/>
+    <addaction name="load_default_action"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <action name="set_default_action">
    <property name="text">
     <string>Set Default</string>
+   </property>
+  </action>
+  <action name="load_default_action">
+   <property name="text">
+    <string>Load Default</string>
    </property>
   </action>
  </widget>
