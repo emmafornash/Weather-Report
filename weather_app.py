@@ -7,7 +7,7 @@ import pycountry
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtSvg
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QDir
 from PyQt5.QtSvg import QSvgWidget
 import qdarkstyle
 import pickle
@@ -24,6 +24,8 @@ class WeatherGUI(QMainWindow):
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
+        # sets up the country model and all fields in it
+        # TODO: set this up to a dictionary or list for cleaner code
         self.country_model = QStandardItemModel()
 
         
@@ -38,9 +40,13 @@ class WeatherGUI(QMainWindow):
         self.set_default_action.triggered.connect(self.save_default_data)
         # lambdatized the connected function to add a file argument to it
         self.load_default_action.triggered.connect(lambda checked, file='user.json': self.load_data(file))
+        self.load_json_action.triggered.connect(self.load_data_from_file)
 
+        # checks if user data already exists. if so, loads it
         if os.path.exists('./user.json'):
             self.load_data(file='user.json')
+        else:
+            self.load_default_action.setDisabled(True)
 
     # Gets the latitude and longitude from a particular zipcode
     def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
@@ -83,6 +89,7 @@ class WeatherGUI(QMainWindow):
             case 'Snow':
                 file += 'snowing.png'
             case 'Clouds':
+                # determines how cloudy the given area is
                 if cloud_percentage <= 50:
                     if sunrise <= dt <= sunset:
                         file += 'cloudy.png'
@@ -225,6 +232,8 @@ class WeatherGUI(QMainWindow):
             
             with open("user.json", "w") as out:
                 out.write(json_obj)
+            
+            self.load_default_action.setDisabled(False)
         except Exception as e:
             print(e)
 
@@ -239,6 +248,11 @@ class WeatherGUI(QMainWindow):
         else:
             self.imperial_radio.setChecked(True)
         self.load_weather(country_name=json_obj['country'])
+
+    # Loads a .json file from a FileDialog
+    def load_data_from_file(self) -> None:
+        file = QFileDialog.getOpenFileName(self, "Open File", ".", 'JSON (*.json)')
+        self.load_data(file[0])
 
 def main() -> None:
     app = QApplication(sys.argv)
