@@ -10,6 +10,7 @@ from PyQt5 import uic, QtSvg
 from PyQt5.QtCore import Qt
 from PyQt5.QtSvg import QSvgWidget
 import qdarkstyle
+import pickle
 
 BASE_API_URL = "https://api.openweathermap.org/"
 
@@ -34,6 +35,36 @@ class WeatherGUI(QMainWindow):
         self.country_list.setModel(self.country_model)
 
         self.get_weather.clicked.connect(self.load_weather)
+        self.set_default_action.triggered.connect(self.save_default_data)
+
+    # Grabs and saves default user data
+    def save_default_data(self):
+        # grabs all data necessary
+        zip_code = self.zipcode_edit.text()
+        country_name = self.country_list.selectedIndexes()[0].data()
+        api_key = self.api_key_edit.text()
+        units = None
+        
+        # returns units in metric
+        if self.metric_radio.isChecked():
+            units = "metric"
+        # returns units in imperial
+        elif self.imperial_radio.isChecked():
+            units = "imperial"
+        
+        # stores data in a dictionary
+        data_dict = {
+            'zip': zip_code,
+            'country': country_name,
+            'api': api_key,
+            'units': units
+        }
+
+        # writes to ./user.json
+        json_obj = json.dumps(data_dict, indent=4)
+        
+        with open("user.json", "w") as out:
+            out.write(json_obj)
 
     # Gets the latitude and longitude from a particular zipcode
     def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
