@@ -252,9 +252,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QLineEdit" name="zipcode_edit">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>450</x>
       <y>230</y>
-      <width>181</width>
+      <width>151</width>
       <height>31</height>
      </rect>
     </property>
@@ -386,20 +386,44 @@ p, li { white-space: pre-wrap; }
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QListView" name="country_list">
+   <widget class="QComboBox" name="country_combo_box">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>450</x>
       <y>270</y>
-      <width>181</width>
+      <width>151</width>
       <height>31</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
+    <property name="currentIndex">
+     <number>0</number>
     </property>
+    <property name="iconSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <item>
+     <property name="text">
+      <string>United States</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>United Kingdom</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Germany</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Canada</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

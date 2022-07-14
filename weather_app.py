@@ -24,18 +24,6 @@ class WeatherGUI(QMainWindow):
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
-        # sets up the country model and all fields in it
-        # TODO: set this up to a dictionary or list for cleaner code
-        self.country_model = QStandardItemModel()
-
-        
-        self.country_model.appendRow(QStandardItem("United States"))
-        self.country_model.appendRow(QStandardItem("United Kingdom"))
-        self.country_model.appendRow(QStandardItem("Germany"))
-        self.country_model.appendRow(QStandardItem("Canada"))
-
-        self.country_list.setModel(self.country_model)
-
         self.get_weather.clicked.connect(self.load_weather)
         self.set_default_action.triggered.connect(self.save_default_data)
         # lambdatized the connected function to add a file argument to it
@@ -151,11 +139,10 @@ class WeatherGUI(QMainWindow):
         self.location_text.setPlainText(city_display)
 
     # Loads weather when all areas are filled
-    def load_weather(self, country_name: str=None) -> None:
+    def load_weather(self) -> None:
         zip_code = self.zipcode_edit.text()
         # loads the selected country name if not loading user data
-        if not country_name:
-            country_name = self.country_list.selectedIndexes()[0].data()
+        country_name = self.country_combo_box.currentText()
         country_code = pycountry.countries.get(name=country_name).alpha_2
         api_key = self.api_key_edit.text()
         units = None
@@ -208,7 +195,7 @@ class WeatherGUI(QMainWindow):
         try:
             # grabs all data necessary
             zip_code = self.zipcode_edit.text()
-            country_name = self.country_list.selectedIndexes()[0].data()
+            country_name = self.country_combo_box.currentText()
             api_key = self.api_key_edit.text()
             units = None
             
@@ -246,11 +233,12 @@ class WeatherGUI(QMainWindow):
         if needed_fields <= json_obj.keys():
             self.zipcode_edit.setText(json_obj['zip'])
             self.api_key_edit.setText(json_obj['api'])
+            self.country_combo_box.setCurrentText(json_obj['country'])
             if json_obj['units'] == 'metric':
                 self.metric_radio.setChecked(True)
             else:
                 self.imperial_radio.setChecked(True)
-            self.load_weather(country_name=json_obj['country'])
+            self.load_weather()
         else:
             print("Needed fields don't exist in JSON file")
 
