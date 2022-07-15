@@ -9,8 +9,12 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtSvg
 from PyQt5.QtCore import Qt, QDir
 from PyQt5.QtSvg import QSvgWidget
+from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis, QCategoryAxis
 import qdarkstyle
-import pickle
+import datetime as dt
+from collections import Counter
+import math
+
 
 BASE_API_URL = "https://api.openweathermap.org/"
 
@@ -187,8 +191,30 @@ class WeatherGUI(QMainWindow):
             cloud_percentage = api['clouds']['all']
             self.change_weather_icon(self.weather_icon_label, current_weather, dt, sunrise, sunset, cloud_percentage)
             self.change_extra_icon(current_weather, (current_feels_like, units))
+
+            # grabs forecast data
+            forecast_api_request = requests.get(BASE_API_URL + f"data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units={units}")
+            forecast_api = forecast_api_request.json()
+            print(forecast_api)
+
+            weather_buckets = [[(current_weather, cloud_percentage)]]
+            temperature_buckets = [[(current_temperature, '')]]
+
+            weather_buckets, temperature_buckets = self.set_up_buckets(forecast_api, weather_buckets, temperature_buckets)
         except Exception as e:
             print(e)
+
+    # Initializes buckets to have current weather data in them
+    def set_up_buckets(self, api: json, weather_bucket: list, temperature_bucket: list) -> tuple:
+        print(True)
+
+    # Loads temperature forecast chart
+    def load_temperature_forecast(self) -> None:
+        print(True)
+
+    # Loads weather forecast at the bottom
+    def load_weather_forecast(self) -> None:
+        print(True)
 
     # Grabs and saves default user data
     def save_default_data(self):
