@@ -162,6 +162,7 @@ class WeatherGUI(QMainWindow):
             elif self.imperial_radio.isChecked():
                 units = "imperial"
 
+            # requests current weather data
             weather_api_request = requests.get(BASE_API_URL + f"data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units={units}")
             api = weather_api_request.json()
 
@@ -192,7 +193,7 @@ class WeatherGUI(QMainWindow):
             self.change_weather_icon(self.weather_icon_label, current_weather, dt, sunrise, sunset, cloud_percentage)
             self.change_extra_icon(current_weather, (current_feels_like, units))
 
-            # grabs forecast data
+            # requests forecast data
             forecast_api_request = requests.get(BASE_API_URL + f"data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units={units}")
             forecast_api = forecast_api_request.json()
 
@@ -203,7 +204,7 @@ class WeatherGUI(QMainWindow):
             weather_buckets = [[(current_day_of_week, current_weather, cloud_percentage, current_temperature, '')]]
 
             weather_buckets = self.set_up_buckets(forecast_api, weather_buckets)
-            # further processes the weather bucket for displaying to the forecast
+            # further processes the weather bucket before displaying to the forecast
             forecast_days, common_weather, forecast_clouds, forecast_temperatures = self.process_weather_forecast(weather_buckets)
             self.display_forecast_to_screen(forecast_days, common_weather, forecast_clouds, forecast_temperatures, dt, sunrise, sunset)
         except Exception as e:
@@ -294,7 +295,7 @@ class WeatherGUI(QMainWindow):
             temperature_labels[i].setText(temp)
         
     # Grabs and saves default user data
-    def save_default_data(self):
+    def save_default_data(self) -> None:
         try:
             # grabs all data necessary
             zip_code = self.zipcode_edit.text()
@@ -323,12 +324,13 @@ class WeatherGUI(QMainWindow):
             with open("user.json", "w") as out:
                 out.write(json_obj)
             
+            # allows load default action to be selectable
             self.load_default_action.setDisabled(False)
         except Exception as e:
             print(e)
 
     # Loads data from file
-    def load_data(self, file):
+    def load_data(self, file) -> None:
         with open(file, 'r') as file:
             json_obj = json.load(file)
         
@@ -343,7 +345,7 @@ class WeatherGUI(QMainWindow):
                 self.imperial_radio.setChecked(True)
             self.load_weather()
         else:
-            print("Needed fields don't exist in JSON file")
+            print("Needed fields don't exist in selected JSON file")
 
     # Loads a .json file from a FileDialog
     def load_data_from_file(self) -> None:
