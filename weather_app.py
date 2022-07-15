@@ -11,7 +11,7 @@ from PyQt5.QtCore import Qt, QDir
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis, QCategoryAxis
 import qdarkstyle
-import datetime as dt
+import datetime
 from collections import Counter
 import math
 
@@ -195,27 +195,104 @@ class WeatherGUI(QMainWindow):
             # grabs forecast data
             forecast_api_request = requests.get(BASE_API_URL + f"data/2.5/forecast?lat={lat}&lon={lon}&appid={api_key}&units={units}")
             forecast_api = forecast_api_request.json()
-            print(forecast_api)
 
-            weather_buckets = [[(current_weather, cloud_percentage)]]
-            temperature_buckets = [[(current_temperature, '')]]
+            # initializes values with current data and sets them up
 
-            weather_buckets, temperature_buckets = self.set_up_buckets(forecast_api, weather_buckets, temperature_buckets)
+            # grabs specifically the asctime weekday as an abbreviation
+            current_day_of_week = datetime.datetime.fromtimestamp(dt).ctime()[:3]
+            weather_buckets = [[(current_day_of_week, current_weather, cloud_percentage, current_temperature, '')]]
+
+            weather_buckets = self.set_up_buckets(forecast_api, weather_buckets)
+            # further processes the weather bucket for displaying to the forecast
+            forecast_days, common_weather, forecast_clouds, forecast_temperatures = self.process_weather_forecast(weather_buckets)
+            self.display_forecast_to_screen(forecast_days, common_weather, forecast_clouds, forecast_temperatures, dt, sunrise, sunset)
         except Exception as e:
             print(e)
 
     # Initializes buckets to have current weather data in them
-    def set_up_buckets(self, api: json, weather_bucket: list, temperature_bucket: list) -> tuple:
-        print(True)
+    def set_up_buckets(self, api: json, weather_bucket: list) -> tuple:
+        now = datetime.datetime.now().date()
+        for forecast in api['list']:
+            unix_time = forecast['dt']
+            timestamp = datetime.datetime.fromtimestamp(unix_time)
+            forecast_date = timestamp.date()
+            # adds a new bucket if dates are different
+            if now != forecast_date:
+                weather_bucket.append([])
+                now = forecast_date
+
+            day_of_week = timestamp.ctime()[:3]
+            weather = forecast['weather'][0]['main']
+            clouds = forecast['clouds']['all']
+            temperature = round(forecast['main']['temp'])
+            
+            # determines the prefix for time
+            forecast_time = int(timestamp.strftime("%H"))
+            if forecast_time <= 12:
+                forecast_time = f'{forecast_time} AM'
+            else:
+                forecast_time = f'{forecast_time % 12} PM'
+
+            weather_bucket[-1].append((day_of_week, weather, clouds, temperature, forecast_time))
+        
+        # we only need the first 5 days of forecast, so slice off the extra
+        return weather_bucket[:5]
 
     # Loads temperature forecast chart
     def load_temperature_forecast(self) -> None:
         print(True)
 
     # Loads weather forecast at the bottom
-    def load_weather_forecast(self) -> None:
-        print(True)
+    def process_weather_forecast(self, weather_buckets: list) -> tuple:
+        # sets up the modifications needed to change the labels succinctly 
+        forecast_days = []
+        most_common_weather = []
+        average_clouds = []
+        high_and_low_temperatures = []
+        for bucket in weather_buckets:
+            # finds the most common weather, cloud percentage, and max and 
+            # min temperatures per bucket
+            weather_list = []
+            clouds = 0
+            max_temp = -math.inf
+            min_temp = math.inf
 
+            for forecast in bucket:
+                day, weather, cloud, temp, time = forecast
+                forecast_days.append(day)
+                weather_list.append(weather)
+                clouds += cloud
+                if temp > max_temp:
+                    max_temp = temp
+                if temp < min_temp:
+                    min_temp = temp
+            
+            # adds processed values to respective lists
+            val, count = Counter(weather_list).most_common(1)[0]
+            most_common_weather.append(val)
+            average_clouds.append(clouds / len(bucket))
+            high_and_low_temperatures.append(f'{max_temp}° {min_temp}°')  
+        
+        # removes duplicates from forecast days
+        forecast_days = list(dict.fromkeys(forecast_days))
+
+        return forecast_days, most_common_weather, average_clouds, high_and_low_temperatures
+
+    def display_forecast_to_screen(self, forecast_days: list, common_weather: list, clouds: list, temperatures: list, dt: int, sunrise: int, sunset: int) -> None:
+        # all labels to be altered
+        days_of_week_labels = [self.forecast_day_1, self.forecast_day_2, self.forecast_day_3, self.forecast_day_4, self.forecast_day_5]
+        weather_labels = [self.forecast_weather_1, self.forecast_weather_2, self.forecast_weather_3, self.forecast_weather_4, self.forecast_weather_5]
+        temperature_labels = [self.forecast_temp_1, self.forecast_temp_2, self.forecast_temp_3, self.forecast_temp_4, self.forecast_temp_5]
+        
+        for i in range(len(days_of_week_labels)):
+            day = forecast_days[i]
+            weather = common_weather[i]
+            cloud_percentage = clouds[i]
+            temp = temperatures[i]
+            days_of_week_labels[i].setText(day)
+            self.change_weather_icon(weather_labels[i], weather, dt, sunrise, sunset, cloud_percentage)
+            temperature_labels[i].setText(temp)
+        
     # Grabs and saves default user data
     def save_default_data(self):
         try:
