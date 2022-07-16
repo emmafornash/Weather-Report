@@ -4,7 +4,7 @@ import requests
 import json
 import uszipcode as zc
 import pycountry
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QPainter
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtSvg
 from PyQt5.QtCore import Qt, QDir
@@ -33,6 +33,7 @@ class WeatherGUI(QMainWindow):
         # lambdatized the connected function to add a file argument to it
         self.load_default_action.triggered.connect(lambda checked, file='user.json': self.load_data(file))
         self.load_json_action.triggered.connect(self.load_data_from_file)
+        self.temperature_forecast_chart.hide()
 
         # checks if user data already exists. if so, loads it
         if os.path.exists('./user.json'):
@@ -207,6 +208,9 @@ class WeatherGUI(QMainWindow):
             # further processes the weather bucket before displaying to the forecast
             forecast_days, common_weather, forecast_clouds, forecast_temperatures = self.process_weather_forecast(weather_buckets)
             self.display_forecast_to_screen(forecast_days, common_weather, forecast_clouds, forecast_temperatures, dt, sunrise, sunset)
+
+            temperature_buckets = self.process_temperature_forecast(weather_buckets)
+            self.display_temperature_linechart(temperature_buckets[0])
         except Exception as e:
             print(e)
 
@@ -239,11 +243,75 @@ class WeatherGUI(QMainWindow):
         # we only need the first 5 days of forecast, so slice off the extra
         return weather_bucket[:5]
 
-    # Loads temperature forecast chart
-    def load_temperature_forecast(self) -> None:
-        print(True)
+    # Processes weather forecast data for use in the temperature chart
+    def process_temperature_forecast(self, weather_buckets: list) -> list:
+        # adds up to 8 values from the next day's forecast to make the graph more even
+        spillover = 8 - len(weather_buckets[0])
+        weather_buckets[0].extend(weather_buckets[1][:spillover])
+        
+        # only takes the temperature reading and formatted time
+        temperature_buckets = [[(reading[3], reading[4]) for reading in bucket] for bucket in weather_buckets]
+        
+        return temperature_buckets
 
-    # Loads weather forecast at the bottom
+    # Displays the temperature linechart to the screen
+    def display_temperature_linechart(self, temperature_bucket: list) -> None:
+        # initializes a line series to contain all temperature values
+        series = QLineSeries(self)
+        series_labels = []
+        series_max = -math.inf
+        series_min = math.inf
+        for i in range(len(temperature_bucket)):
+            val, time = temperature_bucket[i]
+            series.append(i, val)
+            series_labels.append(time)
+
+            # finds temperature high and low for the ylim of the graph
+            if val > series_max:
+                series_max = val
+            if val < series_min:
+                series_min = val
+        
+        # sets up the labels and colors for the graph
+        series.setPointLabelsVisible(True)
+        series.setPointLabelsColor(Qt.black)
+        series.setPointLabelsFormat("@yPoint")
+        series.setPointLabelsClipping(False)
+        # series.setColor(Qt.yellow)
+
+        chart = QChart()
+
+        # sets up the labels for the x axis
+        axis_x = QCategoryAxis()
+        axis_x.setRange(0, 7)
+        for i in range(len(series_labels)):
+            label = series_labels[i]
+            axis_x.append(label, i)
+        axis_x.setGridLineVisible(False)
+        axis_x.setLabelsPosition(QCategoryAxis.AxisLabelsPositionOnValue)
+
+        # sets up the y axis
+        axis_y = QValueAxis()
+        axis_y.setRange(series_min, series_max + 3)
+        axis_y.setGridLineVisible(False)
+        axis_y.setVisible(False)
+
+        chart.addAxis(axis_x, Qt.AlignBottom)
+        chart.addAxis(axis_y, Qt.AlignLeft)
+
+        chart.addSeries(series)
+        chart.setAnimationOptions(QChart.SeriesAnimations)
+        chart.legend().hide()
+
+        series.attachAxis(axis_x)
+        series.attachAxis(axis_y)
+
+        self.temperature_forecast_chart.setChart(chart)
+        self.temperature_forecast_chart.setRenderHint(QPainter.Antialiasing)
+
+        self.temperature_forecast_chart.show()
+
+    # Processes weather forecast data for use in displaying it to the screen
     def process_weather_forecast(self, weather_buckets: list) -> tuple:
         # sets up the modifications needed to change the labels succinctly 
         forecast_days = []
