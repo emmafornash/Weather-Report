@@ -318,16 +318,20 @@ class WeatherGUI(QMainWindow):
         axis_x.setLabelsPosition(QCategoryAxis.AxisLabelsPositionOnValue)
         axis_x.setLabelsColor(Qt.white)
 
+        # determines the max offset for the ylim
+        max_offset = min_offset = 3
+        if not temperature_chart:
+            max_offset = 15
         # sets up the y axis
         axis_y = QValueAxis()
-        axis_y.setRange(series_min - 3, series_max + 3)
+        axis_y.setRange(series_min - min_offset, series_max + max_offset)
         axis_y.setGridLineVisible(False)
         axis_y.setVisible(False)
 
         # creates and adds a background gradient
         
-        # currently set to one color, the same color as everything 
-        # in the background. may be changed in the future
+        # currently set to one color, the same color as the rest 
+        # of the background. may be changed in the future
         background_gradient = QLinearGradient()
         background_gradient.setStart(QPoint(0, 0))
         background_gradient.setFinalStop(QPoint(0, 1))
