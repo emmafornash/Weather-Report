@@ -4,11 +4,10 @@ import requests
 import json
 import uszipcode as zc
 import pycountry
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QPixmap, QPainter
+from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtSvg
-from PyQt5.QtCore import Qt, QDir
-from PyQt5.QtSvg import QSvgWidget
+from PyQt5 import uic
+from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis, QCategoryAxis
 import qdarkstyle
 import datetime
@@ -209,6 +208,7 @@ class WeatherGUI(QMainWindow):
             forecast_days, common_weather, forecast_clouds, forecast_temperatures = self.process_weather_forecast(weather_buckets)
             self.display_forecast_to_screen(forecast_days, common_weather, forecast_clouds, forecast_temperatures, dt, sunrise, sunset)
 
+            # processes and adds temperature data to the linechart
             temperature_buckets = self.process_temperature_forecast(weather_buckets)
             self.display_temperature_linechart(temperature_buckets[0])
         except Exception as e:
@@ -274,10 +274,10 @@ class WeatherGUI(QMainWindow):
         
         # sets up the labels and colors for the graph
         series.setPointLabelsVisible(True)
-        series.setPointLabelsColor(Qt.black)
+        series.setPointLabelsColor(Qt.white)
         series.setPointLabelsFormat("@yPoint")
         series.setPointLabelsClipping(False)
-        # series.setColor(Qt.yellow)
+        series.setColor(Qt.yellow)
 
         chart = QChart()
 
@@ -289,12 +289,25 @@ class WeatherGUI(QMainWindow):
             axis_x.append(label, i)
         axis_x.setGridLineVisible(False)
         axis_x.setLabelsPosition(QCategoryAxis.AxisLabelsPositionOnValue)
+        axis_x.setLabelsColor(Qt.white)
 
         # sets up the y axis
         axis_y = QValueAxis()
-        axis_y.setRange(series_min, series_max + 3)
+        axis_y.setRange(series_min - 3, series_max + 3)
         axis_y.setGridLineVisible(False)
         axis_y.setVisible(False)
+
+        # creates and adds a background gradient
+        
+        # currently set to one color, the same color as everything 
+        # in the background. may be changed in the future
+        background_gradient = QLinearGradient()
+        background_gradient.setStart(QPoint(0, 0))
+        background_gradient.setFinalStop(QPoint(0, 1))
+        background_gradient.setColorAt(0.0, QColor(25, 35, 45))
+        background_gradient.setColorAt(1.0, QColor(25, 35, 45))
+        background_gradient.setCoordinateMode(QGradient.ObjectBoundingMode)
+        chart.setBackgroundBrush(background_gradient)
 
         chart.addAxis(axis_x, Qt.AlignBottom)
         chart.addAxis(axis_y, Qt.AlignLeft)
@@ -302,6 +315,10 @@ class WeatherGUI(QMainWindow):
         chart.addSeries(series)
         chart.setAnimationOptions(QChart.SeriesAnimations)
         chart.legend().hide()
+
+        # removes large margins around the chart layout for a cleaner look
+        chart.layout().setContentsMargins(0, 0, 5, 0)
+        chart.setBackgroundRoundness(0)
 
         series.attachAxis(axis_x)
         series.attachAxis(axis_y)
