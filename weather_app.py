@@ -27,12 +27,21 @@ class WeatherGUI(QMainWindow):
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
+        # initializes the temp and precipitation field to reduce api requests
+        self.temp_and_precip_data = None
+
         self.get_weather.clicked.connect(self.load_weather)
         self.set_default_action.triggered.connect(self.save_default_data)
         # lambdatized the connected function to add a file argument to it
         self.load_default_action.triggered.connect(lambda checked, file='user.json': self.load_data(file))
         self.load_json_action.triggered.connect(self.load_data_from_file)
+        self.temperature_tool_button.clicked.connect(lambda checked, temp=True: self.display_forecast_linechart(self.temp_and_precip_data, temp))
+        self.precipitation_tool_button.clicked.connect(lambda checked, temp=False: self.display_forecast_linechart(self.temp_and_precip_data, temp))
+
+        # hides elements that do not yet need to be seen
         self.temperature_forecast_chart.hide()
+        self.temperature_tool_button.hide()
+        self.precipitation_tool_button.hide()
 
         # checks if user data already exists. if so, loads it
         if os.path.exists('./user.json'):
@@ -53,7 +62,6 @@ class WeatherGUI(QMainWindow):
     
     # changes weather icon given a particular weather state
     def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int, cloud_percentage: int) -> None:
-        print(weather)
         file = "icons/inverted/"
         # 15 minute time offset in unix UTC
         sunrise_set_offet = 900
@@ -199,9 +207,15 @@ class WeatherGUI(QMainWindow):
 
             # initializes values with current data and sets them up
 
+            # determines if it is currently raining
+            # may not be entirely accurate
+            rain_percentage = 0
+            if 'rain' in api:
+                rain_percentage = 100
+
             # grabs specifically the asctime weekday as an abbreviation
             current_day_of_week = datetime.datetime.fromtimestamp(dt).ctime()[:3]
-            weather_buckets = [[(current_day_of_week, current_weather, cloud_percentage, current_temperature, '')]]
+            weather_buckets = [[(current_day_of_week, current_weather, cloud_percentage, current_temperature, rain_percentage, '')]]
 
             weather_buckets = self.set_up_buckets(forecast_api, weather_buckets)
             # further processes the weather bucket before displaying to the forecast
@@ -209,8 +223,9 @@ class WeatherGUI(QMainWindow):
             self.display_forecast_to_screen(forecast_days, common_weather, forecast_clouds, forecast_temperatures, dt, sunrise, sunset)
 
             # processes and adds temperature data to the linechart
-            temperature_buckets = self.process_temperature_forecast(weather_buckets)
-            self.display_temperature_linechart(temperature_buckets[0])
+            # currently only the first bucket is required, but more may be needed in the future
+            self.temp_and_precip_data = self.process_forecast_linechart(weather_buckets)[0]
+            self.display_forecast_linechart(self.temp_and_precip_data)
         except Exception as e:
             print(e)
 
@@ -230,6 +245,7 @@ class WeatherGUI(QMainWindow):
             weather = forecast['weather'][0]['main']
             clouds = forecast['clouds']['all']
             temperature = round(forecast['main']['temp'])
+            rain = round(forecast['pop'] * 100)
             
             # determines the prefix for time
             forecast_time = int(timestamp.strftime("%H"))
@@ -238,46 +254,57 @@ class WeatherGUI(QMainWindow):
             else:
                 forecast_time = f'{forecast_time % 12} PM'
 
-            weather_bucket[-1].append((day_of_week, weather, clouds, temperature, forecast_time))
+            weather_bucket[-1].append((day_of_week, weather, clouds, temperature, rain, forecast_time))
         
         # we only need the first 5 days of forecast, so slice off the extra
         return weather_bucket[:5]
 
-    # Processes weather forecast data for use in the temperature chart
-    def process_temperature_forecast(self, weather_buckets: list) -> list:
+    # Processes weather forecast data for use in the forecast linechart
+    def process_forecast_linechart(self, weather_buckets: list) -> list:
         # adds up to 8 values from the next day's forecast to make the graph more even
         spillover = 8 - len(weather_buckets[0])
         weather_buckets[0].extend(weather_buckets[1][:spillover])
         
         # only takes the temperature reading and formatted time
-        temperature_buckets = [[(reading[3], reading[4]) for reading in bucket] for bucket in weather_buckets]
+        forecast_graph_buckets = [[(reading[3], reading[4], reading[5]) for reading in bucket] for bucket in weather_buckets]
+
+        # now that the 
+        self.temperature_tool_button.show()
+        self.precipitation_tool_button.show()
         
-        return temperature_buckets
+        return forecast_graph_buckets
 
     # Displays the temperature linechart to the screen
-    def display_temperature_linechart(self, temperature_bucket: list) -> None:
+    def display_forecast_linechart(self, forecast_bucket: list, temperature_chart: bool=True) -> None:
         # initializes a line series to contain all temperature values
         series = QLineSeries(self)
         series_labels = []
         series_max = -math.inf
         series_min = math.inf
-        for i in range(len(temperature_bucket)):
-            val, time = temperature_bucket[i]
-            series.append(i, val)
+        for i in range(len(forecast_bucket)):
+            temp, rain, time = forecast_bucket[i]
+
+            important_var = rain
+            if temperature_chart:
+                important_var = temp
+            
+            series.append(i, important_var)
             series_labels.append(time)
 
             # finds temperature high and low for the ylim of the graph
-            if val > series_max:
-                series_max = val
-            if val < series_min:
-                series_min = val
+            if temp > series_max:
+                series_max = important_var
+            if temp < series_min:
+                series_min = important_var
         
         # sets up the labels and colors for the graph
         series.setPointLabelsVisible(True)
         series.setPointLabelsColor(Qt.white)
         series.setPointLabelsFormat("@yPoint")
         series.setPointLabelsClipping(False)
-        series.setColor(Qt.yellow)
+        series.setColor(Qt.blue)
+        if temperature_chart:
+            series.setColor(Qt.yellow)
 
         chart = QChart()
 
@@ -291,16 +318,20 @@ class WeatherGUI(QMainWindow):
         axis_x.setLabelsPosition(QCategoryAxis.AxisLabelsPositionOnValue)
         axis_x.setLabelsColor(Qt.white)
 
+        # determines the max offset for the ylim
+        max_offset = min_offset = 3
+        if not temperature_chart:
+            max_offset = 15
         # sets up the y axis
         axis_y = QValueAxis()
-        axis_y.setRange(series_min - 3, series_max + 3)
+        axis_y.setRange(series_min - min_offset, series_max + max_offset)
         axis_y.setGridLineVisible(False)
         axis_y.setVisible(False)
 
         # creates and adds a background gradient
         
-        # currently set to one color, the same color as everything 
-        # in the background. may be changed in the future
+        # currently set to one color, the same color as the rest 
+        # of the background. may be changed in the future
         background_gradient = QLinearGradient()
         background_gradient.setStart(QPoint(0, 0))
         background_gradient.setFinalStop(QPoint(0, 1))
@@ -344,7 +375,7 @@ class WeatherGUI(QMainWindow):
             min_temp = math.inf
 
             for forecast in bucket:
-                day, weather, cloud, temp, time = forecast
+                day, weather, cloud, temp, rain_percent, time = forecast
                 forecast_days.append(day)
                 weather_list.append(weather)
                 clouds += cloud
