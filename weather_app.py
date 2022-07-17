@@ -31,7 +31,8 @@ class WeatherGUI(QMainWindow):
         self.temp_and_precip_data = None
 
         self.get_weather.clicked.connect(self.load_weather)
-        self.set_default_action.triggered.connect(self.save_default_data)
+        self.set_default_action.triggered.connect(lambda checked, default=True: self.save_data(default))
+        self.save_json_action.triggered.connect(lambda checked, default=False: self.save_data(default))
         # lambdatized the connected function to add a file argument to it
         self.load_default_action.triggered.connect(lambda checked, file='user.json': self.load_data(file))
         self.load_json_action.triggered.connect(self.load_data_from_file)
@@ -410,9 +411,13 @@ class WeatherGUI(QMainWindow):
             self.change_weather_icon(weather_labels[i], weather, dt, sunrise, sunset, cloud_percentage)
             temperature_labels[i].setText(temp)
         
-    # Grabs and saves default user data
-    def save_default_data(self) -> None:
+    # Grabs and saves default user data as a .json
+    def save_data(self, default: bool=True) -> None:
         try:
+            # determines the path, opening a dialog box if default is False
+            path = 'user.json'
+            if not default:
+                path = QFileDialog.getSaveFileName(self, 'Save JSON', ".", 'JSON (*.json)')[0] + '.json'
             # grabs all data necessary
             zip_code = self.zipcode_edit.text()
             country_name = self.country_combo_box.currentText()
@@ -437,7 +442,7 @@ class WeatherGUI(QMainWindow):
             # writes to ./user.json
             json_obj = json.dumps(data_dict, indent=4)
             
-            with open("user.json", "w") as out:
+            with open(path, "w") as out:
                 out.write(json_obj)
             
             # allows load default action to be selectable
