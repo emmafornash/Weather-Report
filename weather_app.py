@@ -4,7 +4,7 @@ import requests
 import json
 import uszipcode as zc
 import pycountry
-from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient
+from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QFocusEvent
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QPoint
@@ -31,11 +31,11 @@ class WeatherGUI(QMainWindow):
         self.temp_and_precip_data = None
 
         self.get_weather.clicked.connect(self.load_weather)
+        # added lambdas to pass through arguments
         self.set_default_action.triggered.connect(lambda checked, default=True: self.save_data(default))
         self.save_json_action.triggered.connect(lambda checked, default=False: self.save_data(default))
-        # lambdatized the connected function to add a file argument to it
-        self.load_default_action.triggered.connect(lambda checked, file='user.json': self.load_data(file))
-        self.load_json_action.triggered.connect(self.load_data_from_file)
+        self.load_default_action.triggered.connect(lambda checked, default=True: self.load_data(default))
+        self.load_json_action.triggered.connect(lambda checked, default=False: self.load_data(default))
         self.temperature_tool_button.clicked.connect(lambda checked, temp=True: self.display_forecast_linechart(self.temp_and_precip_data, temp))
         self.precipitation_tool_button.clicked.connect(lambda checked, temp=False: self.display_forecast_linechart(self.temp_and_precip_data, temp))
 
@@ -46,7 +46,7 @@ class WeatherGUI(QMainWindow):
 
         # checks if user data already exists. if so, loads it
         if os.path.exists('./user.json'):
-            self.load_data(file='user.json')
+            self.load_data()
         else:
             self.load_default_action.setDisabled(True)
 
@@ -411,7 +411,7 @@ class WeatherGUI(QMainWindow):
             self.change_weather_icon(weather_labels[i], weather, dt, sunrise, sunset, cloud_percentage)
             temperature_labels[i].setText(temp)
         
-    # Grabs and saves default user data as a .json
+    # Grabs and saves data on-screen to a .json file
     def save_data(self, default: bool=True) -> None:
         try:
             # determines the path, opening a dialog box if default is False
@@ -450,10 +450,14 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
 
-    # Loads data from file
-    def load_data(self, file) -> None:
-        with open(file, 'r') as file:
-            json_obj = json.load(file)
+    # Loads data from a .json file
+    def load_data(self, default: bool=True) -> None:
+        path = 'user.json'
+        if not default:
+            path = QFileDialog.getSaveFileName(self, 'Save JSON', ".", 'JSON (*.json)')[0] + '.json'
+
+        with open(path, 'r') as out:
+            json_obj = json.load(out)
         
         needed_fields = {"zip", "api", "country", "units"}
         if needed_fields <= json_obj.keys():
@@ -467,11 +471,6 @@ class WeatherGUI(QMainWindow):
             self.load_weather()
         else:
             print("Needed fields don't exist in selected JSON file")
-
-    # Loads a .json file from a FileDialog
-    def load_data_from_file(self) -> None:
-        file = QFileDialog.getOpenFileName(self, "Open File", ".", 'JSON (*.json)')[0]
-        self.load_data(file)
         
 
 def main() -> None:
