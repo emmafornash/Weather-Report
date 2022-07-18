@@ -293,9 +293,9 @@ class WeatherGUI(QMainWindow):
             series_labels.append(time)
 
             # finds temperature high and low for the ylim of the graph
-            if temp > series_max:
+            if important_var > series_max:
                 series_max = important_var
-            if temp < series_min:
+            if important_var < series_min:
                 series_min = important_var
         
         # sets up the labels and colors for the graph
@@ -396,6 +396,7 @@ class WeatherGUI(QMainWindow):
 
         return forecast_days, most_common_weather, average_clouds, high_and_low_temperatures
 
+    # Displays the weather forecast to the screen
     def display_forecast_to_screen(self, forecast_days: list, common_weather: list, clouds: list, temperatures: list, dt: int, sunrise: int, sunset: int) -> None:
         # all labels to be altered
         days_of_week_labels = [self.forecast_day_1, self.forecast_day_2, self.forecast_day_3, self.forecast_day_4, self.forecast_day_5]
