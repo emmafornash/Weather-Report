@@ -175,8 +175,6 @@ class WeatherGUI(QMainWindow):
             weather_api_request = requests.get(BASE_API_URL + f"data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units={units}")
             api = weather_api_request.json()
 
-            print(api)
-
             # grabs weather data from the requested json file
             current_temperature = round(api['main']['temp'])
             current_feels_like = round(api['main']['feels_like'])
