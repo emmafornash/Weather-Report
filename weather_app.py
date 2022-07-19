@@ -4,7 +4,7 @@ import requests
 import json
 import uszipcode as zc
 import pycountry
-from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QFocusEvent
+from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QFocusEvent, QPalette
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QPoint
@@ -151,13 +151,66 @@ class WeatherGUI(QMainWindow):
         self.current_humidity.setPlainText(humidity_display)
         self.location_text.setPlainText(city_display)
 
+    # Checks all typable fields, returning them if all are available. If not, visually shows otherwise
+    def check_fields(self) -> tuple:
+        error_present = False
+
+        zip_code = self.zipcode_edit.text()
+        api_key = self.api_key_edit.text()
+
+        error_msg = ''
+
+        # checks if zip code is empty
+        if zip_code == '':
+            error_present = True
+            error_msg += 'Zip Code field is not set!\n'
+            self.zipcode_edit.setFocus()
+
+        # checks if api key is empty
+        if api_key == '':
+            error_present = True
+            error_msg += 'API Key field is not set!\n'
+            self.zipcode_edit.setFocus()
+            
+        # updates all placeholder text color if needed  
+        self.update_text_edit_color(self.zipcode_edit)
+        self.update_text_edit_color(self.api_key_edit)
+
+        # creates a message box to show the error
+        if error_present:
+            msg_box = QMessageBox()
+            msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+            msg_box.setIcon(QMessageBox.Critical)
+            msg_box.setWindowTitle("Error!")
+            msg_box.setStandardButtons(QMessageBox.Ok)
+            msg_box.setText(error_msg)
+            return_val = msg_box.exec()
+            raise ValueError('One or more fields are not set')
+        
+        return zip_code, api_key
+
+    # Changes the text edit color to red if a problem has arisen
+    def update_text_edit_color(self, edit: QLineEdit) -> None:
+        palette = edit.palette()
+        # by default, sets the color to white
+        palette.setColor(QPalette.PlaceholderText, QColor(255, 255, 255, 50))
+        if edit.text() == '':
+            # changes the color to red
+            palette.setColor(QPalette.PlaceholderText, QColor(255, 0, 0, 50))
+        edit.setPalette(palette)
+
     # Loads weather when all areas are filled
     def load_weather(self) -> None:
-        zip_code = self.zipcode_edit.text()
-        # loads the selected country name if not loading user data
+        try:
+            zip_code, api_key = self.check_fields()
+        except ValueError as e:
+            # changes nothing about current setup if error is raised
+            print(e)
+            return
+
+        # converts the country's name to its alpha 2 country code
         country_name = self.country_combo_box.currentText()
         country_code = pycountry.countries.get(name=country_name).alpha_2
-        api_key = self.api_key_edit.text()
         units = None
 
         try:
@@ -225,8 +278,11 @@ class WeatherGUI(QMainWindow):
             # currently only the first bucket is required, but more may be needed in the future
             self.temp_and_precip_data = self.process_forecast_linechart(weather_buckets)[0]
             self.display_forecast_linechart(self.temp_and_precip_data)
-        except Exception as e:
+        except requests.exceptions.RequestException as e:
+            # catches any request-based errors
             print(e)
+        except TypeError:
+            print(True)
 
     # Initializes buckets to have current weather data in them
     def set_up_buckets(self, api: json, weather_bucket: list) -> tuple:
