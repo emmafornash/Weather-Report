@@ -163,13 +163,13 @@ class WeatherGUI(QMainWindow):
         # checks if zip code is empty
         if zip_code == '':
             error_present = True
-            error_msg += 'Zip Code field is not set!\n'
+            error_msg += "Zip Code field is not set!\n"
             self.zipcode_edit.setFocus()
 
         # checks if api key is empty
         if api_key == '':
             error_present = True
-            error_msg += 'API Key field is not set!\n'
+            error_msg += "API Key field is not set! Make sure to get one from <a href='https://openweathermap.org/price'>OpenWeatherMap</a>.\n"
             self.zipcode_edit.setFocus()
             
         # updates all placeholder text color if needed  
@@ -194,10 +194,35 @@ class WeatherGUI(QMainWindow):
         palette = edit.palette()
         # by default, sets the color to white
         palette.setColor(QPalette.PlaceholderText, QColor(255, 255, 255, 50))
+        edit.setStyleSheet("color: white;")
         if edit.text() == '':
             # changes the color to red
             palette.setColor(QPalette.PlaceholderText, QColor(255, 0, 0, 50))
         edit.setPalette(palette)
+
+    # Determines and visually indicates a problem with the text edit fields
+    def determine_typeerror_cause(self) -> None:
+        api_key = self.api_key_edit.text()
+        error_msg = ''
+
+        # tests if the API key is the issue
+        test_request = requests.get(BASE_API_URL + f"/data/2.5/forecast?id=524901&appid={api_key}")
+        if not test_request:
+            self.api_key_edit.setStyleSheet("color: red;")
+            error_msg = "Problem with the API key! Make sure to double check it, or get one from <a href='https://openweathermap.org/price'>OpenWeatherMap</a>."
+        else:
+            # only triggers if the zipcode was the issue
+            self.zipcode_edit.setStyleSheet("color: red;")
+            error_msg = "Problem with the zip code! Make sure to double check it or the country field."
+        
+        # loads a message box to indicate the error further
+        msg_box = QMessageBox()
+        msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+        msg_box.setIcon(QMessageBox.Critical)
+        msg_box.setWindowTitle("Error!")
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.setText(error_msg)
+        return_val = msg_box.exec()
 
     # Loads weather when all areas are filled
     def load_weather(self) -> None:
@@ -282,7 +307,8 @@ class WeatherGUI(QMainWindow):
             # catches any request-based errors
             print(e)
         except TypeError:
-            print(True)
+            # should only catch any time a request returns a NoneType
+            self.determine_typeerror_cause()
 
     # Initializes buckets to have current weather data in them
     def set_up_buckets(self, api: json, weather_bucket: list) -> tuple:
