@@ -213,7 +213,7 @@ class WeatherGUI(QMainWindow):
         else:
             # only triggers if the zipcode was the issue
             self.zipcode_edit.setStyleSheet("color: red;")
-            error_msg = "Problem with the zip code! Make sure to double check it or the country field."
+            error_msg = "Problem with the zip code! Make sure to double check it or the selected country."
         
         # loads a message box to indicate the error further
         msg_box = QMessageBox()
