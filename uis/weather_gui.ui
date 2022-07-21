@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>608</width>
-    <height>392</height>
+    <width>623</width>
+    <height>557</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,12 +19,12 @@
      <rect>
       <x>150</x>
       <y>30</y>
-      <width>261</width>
+      <width>271</width>
       <height>121</height>
      </rect>
     </property>
     <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
@@ -54,14 +54,14 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:72pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;12°C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;120°C&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="get_weather">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>330</y>
+      <x>520</x>
+      <y>490</y>
       <width>91</width>
       <height>25</height>
      </rect>
@@ -73,11 +73,17 @@ p, li { white-space: pre-wrap; }
    <widget class="QTextEdit" name="current_weather">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>470</x>
       <y>80</y>
       <width>141</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="font">
      <font>
@@ -116,11 +122,17 @@ p, li { white-space: pre-wrap; }
    <widget class="QTextEdit" name="current_humidity">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>470</x>
       <y>120</y>
       <width>141</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="font">
      <font>
@@ -181,7 +193,7 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>150</x>
       <y>150</y>
-      <width>261</width>
+      <width>271</width>
       <height>31</height>
      </rect>
     </property>
@@ -205,8 +217,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QRadioButton" name="imperial_radio">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>300</y>
+      <x>530</x>
+      <y>460</y>
       <width>81</width>
       <height>23</height>
      </rect>
@@ -218,8 +230,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QRadioButton" name="metric_radio">
     <property name="geometry">
      <rect>
-      <x>440</x>
-      <y>300</y>
+      <x>450</x>
+      <y>460</y>
       <width>71</width>
       <height>23</height>
      </rect>
@@ -235,10 +247,16 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>330</y>
+      <y>490</y>
       <width>291</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="font">
      <font>
@@ -252,8 +270,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLineEdit" name="zipcode_edit">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>230</y>
+      <x>460</x>
+      <y>390</y>
       <width>151</width>
       <height>31</height>
      </rect>
@@ -273,11 +291,17 @@ p, li { white-space: pre-wrap; }
    <widget class="QTextEdit" name="current_feels_like">
     <property name="geometry">
      <rect>
-      <x>460</x>
+      <x>470</x>
       <y>40</y>
       <width>141</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="font">
      <font>
@@ -335,7 +359,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="humidity_icon_label">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>430</x>
       <y>120</y>
       <width>31</width>
       <height>31</height>
@@ -354,7 +378,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="weather_desc_icon_label">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>430</x>
       <y>80</y>
       <width>31</width>
       <height>31</height>
@@ -373,7 +397,7 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="extra_icon_label">
     <property name="geometry">
      <rect>
-      <x>420</x>
+      <x>430</x>
       <y>40</y>
       <width>31</width>
       <height>31</height>
@@ -389,11 +413,17 @@ p, li { white-space: pre-wrap; }
    <widget class="QComboBox" name="country_combo_box">
     <property name="geometry">
      <rect>
-      <x>450</x>
-      <y>270</y>
+      <x>460</x>
+      <y>430</y>
       <width>151</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -406,6 +436,46 @@ p, li { white-space: pre-wrap; }
     </property>
     <item>
      <property name="text">
+      <string>Zimbabwe</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Zambia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Yemen</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Vietnam</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Venezuela</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Vanuatu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Uzbekistan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Uruguay</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>United States</string>
      </property>
     </item>
@@ -416,7 +486,832 @@ p, li { white-space: pre-wrap; }
     </item>
     <item>
      <property name="text">
+      <string>United Arab Emirates</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ukraine</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Uganda</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>U.S. Virgin Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Tuvalu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Turkmenistan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Turkey</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Tunisia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Trinidad and Tobago</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Tonga</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Togo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Timor Leste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Thailand</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Tanzania</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Tajikistan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Taiwan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Syria</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Switzerland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sweden</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Suriname</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sudan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sri Lanka</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Spain</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>South Sudan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>South Korea</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>South Africa</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Somalia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Solomon Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Slovenia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Slovakia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Singapore</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sierra Leone</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Serbia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Senegal</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Saudi Arabia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Sao Tome and Principe</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Samoa</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Saint Vincent and the Grenadines</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Saint Martin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Saint Lucia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Saint Kitts and Nevis</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Saint Barthelemy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Rwanda</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Romania</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Reunion</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Republic of the Congo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Qatar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Portugal</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Poland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Philippines</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Peru</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Paraguay</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Papua New Guinea</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Panama</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Pakistan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Oman</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Norway</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Northern Mariana Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>North Macedonia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Nigeria</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Niger</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Nicaragua</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Zealand</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>New Caledonia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Netherlands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Nepal</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Namibia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Myanmar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mozambique</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Morocco</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Montenegro</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mongolia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Monaco</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Moldova</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mexico</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mayotte</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mauritius</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mauritania</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Martinique</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Marshall Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Malta</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Mali</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Maldives</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Malaysia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Malawi</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Madagascar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Macao</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Luxembourg</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Lithuania</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Liechtenstein</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Libya</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Liberia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Lesotho</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Lebanon</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Latvia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Laos</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kyrgyzstan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kuwait</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kosovo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kiribati</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kenya</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Kazakhstan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Jordan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Jersey</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Japan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Jamaica</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ivory Coast</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Italy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Israel</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Isle of Man</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ireland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Iraq</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Iran</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Indonesia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>India</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Iceland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Hungary</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Hong Kong</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Honduras</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Haiti</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Guyana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Guinea-Bissau</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Guinea</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Guernsey</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Guatemala</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Guadeloupe</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Grenada</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Greenland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Greece</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Gibraltar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ghana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
       <string>Germany</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Georgia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Gambia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Gabon</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>French Polynesia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>French Guiana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>France</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Finland</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Fiji</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Faroe Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ethiopia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Eswatini</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Estonia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Eritrea</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Equatorial Guinea</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>El Salvador</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Egypt</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Ecuador</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dominican Republic</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Dominica</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Djibouti</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Denmark</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Democratic Republic of the Congo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Czechia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cyprus</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Curacao</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cuba</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Croatia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cook Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Comoros</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Colombia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>China</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Chile</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Chad</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Central African Republic</string>
      </property>
     </item>
     <item>
@@ -424,6 +1319,626 @@ p, li { white-space: pre-wrap; }
       <string>Canada</string>
      </property>
     </item>
+    <item>
+     <property name="text">
+      <string>Cameroon</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cambodia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Cabo Verde</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Burundi</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Burkina Faso</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bulgaria</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Brunei</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>British Virgin Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Brazil</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Botswana</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bosnia and Herzegovina</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bolivia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bhutan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Benin</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Belize</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Belgium</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Belarus</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Barbados</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bangladesh</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bahrain</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Bahamas</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Azerbaijan</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Austria</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Australia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Aruba</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Armenia</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Argentina</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Antigua and Barbuda</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Angola</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Andorra</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>American Samoa</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Algeria</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Albania</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Aland Islands</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Afghanistan</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QtCharts::QChartView" name="temperature_forecast_chart">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>220</y>
+      <width>591</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>380</y>
+      <width>61</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="d1_forcast">
+     <item>
+      <widget class="QLabel" name="forecast_day_1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Mon</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_weather_1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>59</width>
+         <height>59</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../icons/inverted/clouds.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_temp_1">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>89°-69°</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>90</x>
+      <y>380</y>
+      <width>61</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="d2_forecast">
+     <item>
+      <widget class="QLabel" name="forecast_day_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Tues</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_weather_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>59</width>
+         <height>59</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../icons/inverted/clouds.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_temp_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>89°-69°</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>380</y>
+      <width>61</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="d3_forecast">
+     <item>
+      <widget class="QLabel" name="forecast_day_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Wed</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_weather_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>59</width>
+         <height>59</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../icons/inverted/clouds.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_temp_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>89°-69°</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>380</y>
+      <width>61</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="d4_forecast">
+     <item>
+      <widget class="QLabel" name="forecast_day_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Thur</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_weather_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>59</width>
+         <height>59</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../icons/inverted/clouds.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_temp_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>89°-69°</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>380</y>
+      <width>61</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="d5_forecast">
+     <item>
+      <widget class="QLabel" name="forecast_day_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Fri</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_weather_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>59</width>
+         <height>59</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap>../icons/inverted/clouds.png</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="forecast_temp_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>89°-69°</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QToolButton" name="temperature_tool_button">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>190</y>
+      <width>101</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Temperature</string>
+    </property>
+    <property name="popupMode">
+     <enum>QToolButton::InstantPopup</enum>
+    </property>
+    <property name="toolButtonStyle">
+     <enum>Qt::ToolButtonTextOnly</enum>
+    </property>
+    <property name="autoRaise">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="precipitation_tool_button">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>190</y>
+      <width>101</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Precipitation</string>
+    </property>
+    <property name="popupMode">
+     <enum>QToolButton::InstantPopup</enum>
+    </property>
+    <property name="toolButtonStyle">
+     <enum>Qt::ToolButtonTextOnly</enum>
+    </property>
+    <property name="autoRaise">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -431,7 +1946,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>608</width>
+     <width>623</width>
      <height>22</height>
     </rect>
    </property>
@@ -441,13 +1956,15 @@ p, li { white-space: pre-wrap; }
     </property>
     <addaction name="set_default_action"/>
     <addaction name="load_default_action"/>
+    <addaction name="separator"/>
+    <addaction name="save_json_action"/>
     <addaction name="load_json_action"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
   <action name="set_default_action">
    <property name="text">
-    <string>Set Default</string>
+    <string>Save Default</string>
    </property>
   </action>
   <action name="load_default_action">
@@ -457,10 +1974,23 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="load_json_action">
    <property name="text">
-    <string>Load JSON</string>
+    <string>Open JSON</string>
+   </property>
+  </action>
+  <action name="save_json_action">
+   <property name="text">
+    <string>Save JSON</string>
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QtCharts::QChartView</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">QtCharts/QChartView&gt;
+#include &lt;QtCharts/chartsnamespace.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../icons/ui resource.qrc"/>
  </resources>
