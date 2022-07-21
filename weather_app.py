@@ -2,6 +2,9 @@ import os, sys
 from types import NoneType
 import requests
 import json
+import datetime
+from collections import Counter
+import math
 import uszipcode as zc
 import pycountry
 from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QPalette
@@ -10,10 +13,6 @@ from PyQt5 import uic
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
 import qdarkstyle
-import datetime
-from collections import Counter
-import math
-
 
 BASE_API_URL = "https://api.openweathermap.org/"
 
