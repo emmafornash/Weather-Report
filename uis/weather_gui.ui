@@ -1974,7 +1974,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="load_json_action">
    <property name="text">
-    <string>Load JSON</string>
+    <string>Open JSON</string>
    </property>
   </action>
   <action name="save_json_action">
