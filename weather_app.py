@@ -4,11 +4,11 @@ import requests
 import json
 import uszipcode as zc
 import pycountry
-from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QFocusEvent, QPalette
+from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QPalette
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis, QCategoryAxis
+from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
 import qdarkstyle
 import datetime
 from collections import Counter
@@ -399,9 +399,12 @@ class WeatherGUI(QMainWindow):
         axis_x.setLabelsPosition(QCategoryAxis.AxisLabelsPositionOnValue)
         axis_x.setLabelsColor(Qt.white)
 
-        # determines the max offset for the ylim
+        # determines the ylim for the graph
         max_offset = min_offset = 3
         if not temperature_chart:
+            # makes the graph more relative, which should make it look better
+            series_min = 0
+            series_max = 100
             max_offset = 15
         # sets up the y axis
         axis_y = QValueAxis()
@@ -535,7 +538,7 @@ class WeatherGUI(QMainWindow):
     def load_data(self, default: bool=True) -> None:
         path = 'user.json'
         if not default:
-            path = QFileDialog.getSaveFileName(self, 'Save JSON', ".", 'JSON (*.json)')[0] + '.json'
+            path = QFileDialog.getOpenFileName(self, 'Save JSON', ".", 'JSON (*.json)')[0]
 
         with open(path, 'r') as out:
             json_obj = json.load(out)
