@@ -7,8 +7,8 @@ from collections import Counter
 import math
 import uszipcode as zc
 import pycountry
-from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QPalette
-from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QPixmap, QPainter, QLinearGradient, QColor, QGradient, QPalette, QIcon
+from PyQt5.QtWidgets import QMainWindow, QLabel, QMessageBox, QLineEdit, QFileDialog, QApplication
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtChart import QChart, QLineSeries, QValueAxis, QCategoryAxis
@@ -23,6 +23,7 @@ class WeatherGUI(QMainWindow):
         uic.loadUi('uis/weather_gui.ui', self)
         self.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
         self.setWindowTitle(title)
+        self.setWindowIcon(QIcon('icons/inverted/cloudy.png'))
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
@@ -161,18 +162,18 @@ class WeatherGUI(QMainWindow):
         zip_code = self.zipcode_edit.text()
         api_key = self.api_key_edit.text()
 
-        error_msg = ''
+        error_msg = ""
 
         # checks if zip code is empty
         if zip_code == '':
             error_present = True
-            error_msg += "Zip Code field is not set!\n"
+            error_msg += "Zip Code field is not set!<br>"
             self.zipcode_edit.setFocus()
 
         # checks if api key is empty
         if api_key == '':
             error_present = True
-            error_msg += "API Key field is not set! Make sure to get one from <a href='https://openweathermap.org/price'>OpenWeatherMap</a>.\n"
+            error_msg += "API Key field is not set! Make sure to get one from <a href='https://openweathermap.org/price'>OpenWeatherMap</a>."
             self.zipcode_edit.setFocus()
             
         # updates all placeholder text color if needed  
@@ -181,13 +182,7 @@ class WeatherGUI(QMainWindow):
 
         # creates a message box to show the error
         if error_present:
-            msg_box = QMessageBox()
-            msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-            msg_box.setIcon(QMessageBox.Critical)
-            msg_box.setWindowTitle("Error!")
-            msg_box.setStandardButtons(QMessageBox.Ok)
-            msg_box.setText(error_msg)
-            return_val = msg_box.exec()
+            self.show_error_message(error_msg)
             raise ValueError('One or more fields are not set')
         
         return zip_code, api_key
@@ -219,13 +214,30 @@ class WeatherGUI(QMainWindow):
             error_msg = "Problem with the zip code! Make sure to double check it or the selected country."
         
         # loads a message box to indicate the error further
+        self.show_error_message(error_msg)
+
+    # Loads an error message box with a given message and title
+    def show_error_message(self, message: str, title: str="Error!"):
         msg_box = QMessageBox()
         msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
         msg_box.setIcon(QMessageBox.Critical)
-        msg_box.setWindowTitle("Error!")
+        msg_box.setWindowTitle(title)
         msg_box.setStandardButtons(QMessageBox.Ok)
-        msg_box.setText(error_msg)
+        msg_box.setText(message)
         return_val = msg_box.exec()
+
+    # # Loads an error message box with a given message and title
+    # def show_error_message(self, messages: list, title: str="Error!"):
+    #     message = ''
+    #     for msg in messages:
+    #     print(message)
+    #     msg_box = QMessageBox()
+    #     msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    #     msg_box.setIcon(QMessageBox.Critical)
+    #     msg_box.setWindowTitle(title)
+    #     msg_box.setStandardButtons(QMessageBox.Ok)
+    #     msg_box.setText(message)
+    #     return_val = msg_box.exec()
 
     # Loads weather when all areas are filled
     def load_weather(self) -> None:
@@ -558,7 +570,7 @@ class WeatherGUI(QMainWindow):
             self.load_weather()
         else:
             print("Needed fields don't exist in selected JSON file")
-        
+    
 
 def main() -> None:
     app = QApplication(sys.argv)
