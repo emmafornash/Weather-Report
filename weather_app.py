@@ -26,6 +26,10 @@ class WeatherGUI(QMainWindow):
         self.setFixedSize(self.frameGeometry().width(), self.frameGeometry().height())
         self.show()
 
+        # fixes a qurik with Qt, causing the combo box to 
+        # extend to the top and bottom of the mintor
+        self.country_combo_box.setStyleSheet("combobox-popup: 0;")
+
         # initializes the temp and precipitation field to reduce api requests
         self.temp_and_precip_data = None
 
