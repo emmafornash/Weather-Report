@@ -54,8 +54,15 @@ class WeatherGUI(QMainWindow):
         else:
             self.load_default_action.setDisabled(True)
 
-    # Gets the latitude and longitude from a particular zipcode
     def get_lat_and_lon(self, zip_code: str, country_code: str, api_key: str) -> tuple:
+        '''
+        Gets the latitude and longitude from a particular zipcode using the geocoding API feature
+
+        :param zip_code: given postal code
+        :param country_code: selected country's ISO 3166 country code
+        :param api_key: given api_key
+        :return: tuple of the lattitude and longitude
+        '''
         try:
             # grabs geographical data and gets the latitude and longitude from it
             geocode_api_request = requests.get(BASE_API_URL + f"geo/1.0/zip?zip={zip_code},{country_code}&appid={api_key}")
@@ -65,8 +72,18 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
     
-    # changes weather icon given a particular weather state
     def change_weather_icon(self, label: QLabel, weather: str, dt: int, sunrise: int, sunset: int, cloud_percentage: int) -> None:
+        '''
+        Changes weather icon given a particular weather state
+        
+        :param label: QLabel to be altered
+        :param weather: current weather
+        :param dt: current time in unix time
+        :param sunrise: approximate sunrise time in unix time
+        :param sunset: approximate sunset time in unix time
+        :param cloud_percentage: current cloudiness percentage, 0-100
+        '''
+
         file = "icons/inverted/"
         # 15 minute time offset in unix UTC
         sunrise_set_offet = 900
@@ -107,8 +124,14 @@ class WeatherGUI(QMainWindow):
             
         label.setPixmap(QPixmap(file))
 
-    # Adds any extra icons in front of the "feels like" field
-    def change_extra_icon(self, weather: str, temp_and_units: tuple):
+    def change_extra_icon(self, weather: str, temp_and_units: tuple) -> None:
+        '''
+        Adds any extra icons in front of the "feels like" field
+        
+        :param weather: current weather
+        :param temp_and_units: tuple of current temperature and selected units
+        '''
+
         # sets up the proper threshold values depending on the units given
         too_hot_threshold = too_cold_threshold = -1
         match temp_and_units[1]:
@@ -132,8 +155,18 @@ class WeatherGUI(QMainWindow):
         
         self.extra_icon_label.setPixmap(QPixmap(file))
 
-    # Displays loaded weather in the GUI
     def display_weather_on_screen(self, temp: int, weather: str, humidity: int, city_name: str, country: str, feels_like: str, units: str) -> None:
+        '''
+        Displays loaded weather in the GUI
+
+        :param temp: current temperature
+        :param weather: current weather
+        :param humidity: current humidity
+        :param city_name: selected city name
+        :param country: selected country
+        :param feels_like: current "feels like" temperature
+        :param units: selected units
+        '''
         # determines the degree reading of the temperature
         ending_units = None
         if units == "metric":
@@ -155,8 +188,10 @@ class WeatherGUI(QMainWindow):
         self.current_humidity.setPlainText(humidity_display)
         self.location_text.setPlainText(city_display)
 
-    # Checks all typable fields, returning them if all are available. If not, visually shows otherwise
     def check_fields(self) -> tuple:
+        '''
+        Checks all typable fields, returning them if all are available. If not, visually shows otherwise
+        '''
         error_present = False
 
         zip_code = self.zipcode_edit.text()
@@ -187,8 +222,12 @@ class WeatherGUI(QMainWindow):
         
         return zip_code, api_key
 
-    # Changes the text edit color to red if a problem has arisen
     def update_text_edit_color(self, edit: QLineEdit) -> None:
+        '''
+        Changes the text edit color to red if a problem has arisen
+
+        :param edit: the QLineEdit to be changed
+        '''
         palette = edit.palette()
         # by default, sets the color to white
         palette.setColor(QPalette.PlaceholderText, QColor(255, 255, 255, 50))
@@ -198,8 +237,10 @@ class WeatherGUI(QMainWindow):
             palette.setColor(QPalette.PlaceholderText, QColor(255, 0, 0, 50))
         edit.setPalette(palette)
 
-    # Determines and visually indicates a problem with the text edit fields
     def determine_typeerror_cause(self) -> None:
+        '''
+        Determines and visually indicates a problem with the text edit fields
+        '''
         api_key = self.api_key_edit.text()
         error_msg = ''
 
@@ -216,31 +257,27 @@ class WeatherGUI(QMainWindow):
         # loads a message box to indicate the error further
         self.show_error_message(error_msg)
 
-    # Loads an error message box with a given message and title
-    def show_error_message(self, message: str, title: str="Error!"):
+    def show_error_message(self, message: str, title: str="Error!") -> int:
+        '''
+        Loads an error message box with a given message and title
+
+        :param message: given message to be displayed
+        :param title: given title to be displayed, defaults to 'Error!'
+        :return: a StandardButton value indicating that the standard button was clicked
+        '''
+
         msg_box = QMessageBox()
         msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
         msg_box.setIcon(QMessageBox.Critical)
         msg_box.setWindowTitle(title)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.setText(message)
-        return_val = msg_box.exec()
+        return msg_box.exec()
 
-    # # Loads an error message box with a given message and title
-    # def show_error_message(self, messages: list, title: str="Error!"):
-    #     message = ''
-    #     for msg in messages:
-    #     print(message)
-    #     msg_box = QMessageBox()
-    #     msg_box.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-    #     msg_box.setIcon(QMessageBox.Critical)
-    #     msg_box.setWindowTitle(title)
-    #     msg_box.setStandardButtons(QMessageBox.Ok)
-    #     msg_box.setText(message)
-    #     return_val = msg_box.exec()
-
-    # Loads weather when all areas are filled
     def load_weather(self) -> None:
+        '''
+        Loads and displays weather when all areas are filled
+        '''
         try:
             zip_code, api_key = self.check_fields()
         except ValueError as e:
@@ -325,8 +362,16 @@ class WeatherGUI(QMainWindow):
             # should only catch any time a request returns a NoneType
             self.determine_typeerror_cause()
 
-    # Initializes buckets to have current weather data in them
-    def set_up_buckets(self, api: json, weather_bucket: list) -> tuple:
+    def set_up_buckets(self, api: json, weather_bucket: list) -> list:
+        '''
+        Initializes buckets to have current weather data in them
+
+        :param api: json object of the returned api request
+        :param weather_buckets: a list of lists to fill with daily weather data
+        :return: the first five days' buckets. the sixth is not needed as it has 
+                 no way of being completely filled
+        '''
+
         now = datetime.datetime.now().date()
         for forecast in api['list']:
             unix_time = forecast['dt']
@@ -355,23 +400,32 @@ class WeatherGUI(QMainWindow):
         # we only need the first 5 days of forecast, so slice off the extra
         return weather_bucket[:5]
 
-    # Processes weather forecast data for use in the forecast linechart
     def process_forecast_linechart(self, weather_buckets: list) -> list:
+        '''
+        Processes weather forecast data for use in the forecast linechart
+
+        :param weather_buckets: a list of lists filled with daily weather data
+        :return: the processed forecast data for the linechart
+        '''
+
         # adds up to 8 values from the next day's forecast to make the graph more even
         spillover = 8 - len(weather_buckets[0])
         weather_buckets[0].extend(weather_buckets[1][:spillover])
         
         # only takes the temperature reading and formatted time
         forecast_graph_buckets = [[(reading[3], reading[4], reading[5]) for reading in bucket] for bucket in weather_buckets]
-
-        # now that the 
-        self.temperature_tool_button.show()
-        self.precipitation_tool_button.show()
         
         return forecast_graph_buckets
 
-    # Displays the temperature linechart to the screen
     def display_forecast_linechart(self, forecast_bucket: list, temperature_chart: bool=True) -> None:
+        '''
+        Displays the temperature linechart to the screen
+
+        :param forecast_bucket: a list of the current day's temperature and 
+               precipitation data
+        :param temperature_chart: determines if the chart is a temperature or
+                                  precipitation chart. defaults to True 
+        '''
         # initializes a line series to contain all temperature values
         series = QLineSeries(self)
         series_labels = []
@@ -458,8 +512,18 @@ class WeatherGUI(QMainWindow):
 
         self.temperature_forecast_chart.show()
 
-    # Processes weather forecast data for use in displaying it to the screen
+        # now that the forecast has been displayed, we can show the buttons for the different graphs
+        self.temperature_tool_button.show()
+        self.precipitation_tool_button.show()
+
     def process_weather_forecast(self, weather_buckets: list) -> tuple:
+        '''
+        Processes weather forecast data for use in displaying it to the screen
+
+        :param weather_buckets: a list of lists filled with daily weather data
+        :return: the processed forecast data for the forecast
+        '''
+
         # sets up the modifications needed to change the labels succinctly 
         forecast_days = []
         most_common_weather = []
@@ -494,8 +558,19 @@ class WeatherGUI(QMainWindow):
 
         return forecast_days, most_common_weather, average_clouds, high_and_low_temperatures
 
-    # Displays the weather forecast to the screen
     def display_forecast_to_screen(self, forecast_days: list, common_weather: list, clouds: list, temperatures: list, dt: int, sunrise: int, sunset: int) -> None:
+        '''
+        Displays the weather forecast to the screen
+
+        :param forecast_days: list of the next five days' forecasts
+        :param common_weather: list of the most common weather pattern of the 
+               next five days
+        :param temperatures: list of high and low temperature tuples
+        :param dt: current time in unix time
+        :param sunrise: approximate sunrise time in unix time
+        :param sunset: approximate sunset time in unix time
+        '''
+
         # all labels to be altered
         days_of_week_labels = [self.forecast_day_1, self.forecast_day_2, self.forecast_day_3, self.forecast_day_4, self.forecast_day_5]
         weather_labels = [self.forecast_weather_1, self.forecast_weather_2, self.forecast_weather_3, self.forecast_weather_4, self.forecast_weather_5]
@@ -510,8 +585,13 @@ class WeatherGUI(QMainWindow):
             self.change_weather_icon(weather_labels[i], weather, dt, sunrise, sunset, cloud_percentage)
             temperature_labels[i].setText(temp)
         
-    # Grabs and saves data on-screen to a .json file
     def save_data(self, default: bool=True) -> None:
+        '''
+        Grabs and saves data on-screen to a .json file
+
+        :param default: determines if the data in question is to be loaded
+                        on app load, saved as 'user.json'. defaults to True
+        '''
         try:
             # determines the path, opening a dialog box if default is False
             path = 'user.json'
@@ -549,8 +629,13 @@ class WeatherGUI(QMainWindow):
         except Exception as e:
             print(e)
 
-    # Loads data from a .json file
     def load_data(self, default: bool=True) -> None:
+        '''
+        Loads data from a .json file
+
+        :param default: determines if the data should be loaded from the 
+                        'user.json' file or a file dialog. defaults to True
+        '''
         path = 'user.json'
         if not default:
             path = QFileDialog.getOpenFileName(self, 'Save JSON', ".", 'JSON (*.json)')[0]
