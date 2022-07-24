@@ -1,4 +1,4 @@
-# Weather App
+# ☁️ Weather Report
 
 A minimalist weather app in Python, using data from OpenWeatherMap.
 
