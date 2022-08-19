@@ -17,6 +17,7 @@ This project was built as a personal alternative to using Google's weather featu
 
 ### Dependencies
 
+- [requests](https://pypi.org/project/requests/)
 - [uszipcode](https://github.com/MacHu-GWU/uszipcode-project)
 - [pycountry](https://github.com/flyingcircusio/pycountry)
 - [PyQt5](https://www.riverbankcomputing.com/software/pyqt/)
@@ -26,7 +27,7 @@ This project was built as a personal alternative to using Google's weather featu
 ### Instructions
 
 1. Clone this project
-2. Install the dependencies above - `pip install -r requirements.txt`[^1]
+2. Install the dependencies above - `pip install requests uszipcode pycountry PyQt5 pyqtchart qdarkstyle` <!-- `pip install -r requirements.txt`[^1] -->
 3. Obtain an API key from [OpenWeatherMap](https://openweathermap.org/price) (it's free!)
 4. Run `weather_app.py`
 
@@ -45,4 +46,4 @@ Fill in the required fields for API key and postal code, choose your country (ty
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
 
-[^1]: Although the `requirements.txt` file is quite large, a lot of what is listed are sub dependencies for the `uszipcode` module.
+<!-- [^1]: Although the `requirements.txt` file is quite large, a lot of what is listed are sub dependencies for the `uszipcode` module. -->
